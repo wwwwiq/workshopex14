@@ -1,57 +1,149 @@
 package predictive;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.Set;
 
 
 
 public class DictionaryListImpl extends PredictivePrototype {
 	public static String now;
-	/**
-	public static ArrayList<WordSig> values(int length){ // contain all the values of possible moves 
-
-		ArrayList<WordSig>  n = new ArrayList<WordSig>();
-		for(int i =0;i<length ; i++){
-				n.add(new WordSig());
-			}
-
-			
-				
+	public static ArrayList<WordSig> dictEnt = new ArrayList<WordSig>();
+	private File textFile;
+    private Scanner input;
+    private Scanner dictRead;
+    private String teamName;
+    public static WordSig entry = new WordSig(null, null);
+	DictionaryListImpl(File file) {
+		textFile = file;
+		ReadFile(file);
+	//	File _file = textFile;
 		
-		  return n;
-		  
-	}
-	*/
-	
-	
-	
-	public DictionaryListImpl(File _file) {
-		  try {
-		Scanner dictRead = new Scanner(_file);
-		   ArrayList<WordSig> dictEnt = new ArrayList<WordSig>();
+//		entry = new WordSig("abc", wordToSignature("abc"));
+//		dictEnt.add(entry);
+		
+//		ReadFile(textFile);
+		/*
+		 try {
+			  if (checkBeforeReadfile(_file)){
+		   dictRead = new Scanner(_file);
+//		   dictEnt = new ArrayList<WordSig>();
 		   while (dictRead.hasNext()) {
 		    String next = dictRead.nextLine();
 		    if(isValidWord(next)) {
 		     WordSig entry = new WordSig(next.toLowerCase(), wordToSignature(next.toLowerCase()));
+		     System.out.println(entry.toString()); 
 		     dictEnt.add(entry);
-		    }
+		    }teamName
 		   }
 		   Collections.sort(dictEnt);
-
+			  }else{
+			        System.out.println("Can't find the file");
+			      }
 		  } catch (FileNotFoundException e) {
 		   e.printStackTrace();
 		  }
+		  */
+		  
+			  
+			 
+
 		 }
+	
+	 private void ReadFile(File _file) {
+		 try {
+			  if (checkBeforeReadfile(_file)){
+		   dictRead = new Scanner(_file);
+		   dictEnt = new ArrayList<WordSig>();
+		   while (dictRead.hasNext()) {
+		    String next = dictRead.nextLine().toLowerCase();
+		    if(isValidWord(next)) {
+		      entry = new WordSig(next, wordToSignature(next));
+		//     System.out.println(entry.toString()); 
+		     dictEnt.add(entry);
+		    }
+		   }
+		   Collections.sort(dictEnt);		
+
+			  }else{
+			        System.out.println("Can't find the file");
+			      }
+		  } catch (FileNotFoundException e) {
+		   e.printStackTrace();
+		  }
+		  }
+
+		  private static boolean checkBeforeReadfile(File file){
+		    if (file.exists()){
+		      if (file.isFile() && file.canRead()){
+		        return true;
+		      }
+		    }
+
+		    return false;
+		  }
+		  
+		    
+	/*
+	private void readInFile(File textFile){
+        try {
+            input = new Scanner(textFile);
+
+            //read first string into variable teamName
+            teamName = input.next();
+
+            int i=0;
+            //iterate through rest of file adding it to an ArrayList
+            while(input.hasNext()){
+                battingAvgs[i] = input.nextDouble();
+                i++;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+	
+		    private BufferedReader wordsFile() {
+		    	BufferedReader words = null;
+
+		    	try {
+		                words = new BufferedReader(new FileReader("K://Study/Software workshop/workspace/EX14/src/predictive/words.txt"));
+		    	}
+		    	catch (IOException e) {
+		    	    System.out.println("Couldn't open words file");
+		                System.out.println(e.getMessage());
+		                System.exit(1);
+		            }
+
+		    	return words;
+		        }
+
 
 	public static void main(String[] args) {
-		
+
+		DictionaryListImpl reader = new DictionaryListImpl(new File("/usr/share/dict/words"));
+//		reader.ReadFile(new File("K://Study/Software workshop/workspace/EX14/src/predictive/words.txt"));
+//BufferedReader words = reader.wordsFile();
+//		for(int i = 0; i < dictEnt.size(); i++) { 
+//		 entry = new WordSig("abc", wordToSignature("abc"));
+//		dictEnt.add(entry);
+			System.out.println(dictEnt.get(0).toString()); 
+			
+//		}
+		/*
 		Scanner in = new Scanner(System.in);
 				
-		System.out.println("test wordToSignature");
+     	System.out.println("test wordToSignature");
 		input = in.nextLine();
 		now = input;
 		System.out.println(wordToSignature(input));
@@ -59,63 +151,20 @@ public class DictionaryListImpl extends PredictivePrototype {
 		System.out.println("Testing signatureToWords...");
 		System.out.println();
 		System.out.println(signatureToWords(wordToSignature(input)));
-		System.out.println("Your input word should be one of the above...hopefully");	
+		System.out.println("Your input word should be one of the above...hopefully");
+		*/	
 	}
 	
+
+
 	public String getinput()
 	{
 		return now;
 	}
-	public int SignatureCount(String word) {
-		ArrayList<Integer> Slot = new ArrayList<Integer>();
-		int cal = 0;
-		word = word.toLowerCase();
-		
-		Hashtable<String, Integer> charTable = new Hashtable<String, Integer>();
-		charTable.put("a", 2);
-		charTable.put("b", 2);
-		charTable.put("c", 2);
-		charTable.put("d", 3);
-		charTable.put("e", 3);
-		charTable.put("f", 3);
-		charTable.put("g", 4);
-		charTable.put("h", 4);
-		charTable.put("i", 4);
-		charTable.put("j", 5);
-		charTable.put("k", 5);
-		charTable.put("l", 5);
-		charTable.put("m", 6);
-		charTable.put("n", 6);
-		charTable.put("o", 6);
-		charTable.put("p", 7);
-		charTable.put("q", 7);
-		charTable.put("r", 7);
-		charTable.put("s", 7);
-		charTable.put("t", 8);
-		charTable.put("u", 8);
-		charTable.put("v", 8);
-		charTable.put("w", 9);
-		charTable.put("x", 9);
-		charTable.put("y", 9);
-		charTable.put("z", 9);
-		
+	
+	 public static Set<String> signatureToWords(String signature) {
+		return null;
 
-		
-		for(int i = 0; i < word.length(); i++) { 
-			if(!charTable.containsKey(Character.toString(word.charAt(i)))) {
-				Slot.add(0);
-			} else {
-				Slot.add(charTable.get(Character.toString(word.charAt(i))));
-			}
-		}
-		for(int i = 0; i < Slot.size(); i++) { 
-			cal = (int) (cal + Slot.get(i) * Math.pow(10, i));
-			
-		}
-		
-		Slot.clear();
-		
-		return cal;
-	}
+	 }
 
 }
